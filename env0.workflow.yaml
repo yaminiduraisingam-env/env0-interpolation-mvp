@@ -1,0 +1,38 @@
+environments:
+  network:
+    name: "${WORKFLOW_ENV_PREFIX}-network"
+    templateName: "noop-network"
+    workspace: "${WORKSPACE_ID}-net"
+    revision: "${TARGET_REVISION}"
+
+  security:
+    name: "${WORKFLOW_ENV_PREFIX}-security"
+    templateName: "noop-security"
+    workspace: "${WORKSPACE_ID}-sec"
+    revision: "${TARGET_REVISION}"
+    needs:
+      - network
+
+  data:
+    name: "${WORKFLOW_ENV_PREFIX}-data"
+    templateName: "noop-data"
+    workspace: "${WORKSPACE_ID}-data"
+    revision: "${TARGET_REVISION}"
+    needs:
+      - security
+
+  app:
+    name: "${WORKFLOW_ENV_PREFIX}-app"
+    templateName: "noop-app"
+    workspace: "${WORKSPACE_ID}-app"
+    revision: "${TARGET_REVISION}"
+    needs:
+      - data
+
+  monitoring:
+    name: "${WORKFLOW_ENV_PREFIX}-monitoring"
+    templateName: "noop-monitoring"
+    workspace: "${WORKSPACE_ID}-mon"
+    revision: "${TARGET_REVISION}"
+    needs:
+      - app
