@@ -1,13 +1,13 @@
 environments:
   network:
     name: "${WORKFLOW_ENV_PREFIX}-network"
-    templateName: "noop-network"
+    templateName: "no-op-network"
     workspace: "${WORKSPACE_ID}-net"
     revision: "${TARGET_REVISION}"
 
   security:
     name: "${WORKFLOW_ENV_PREFIX}-security"
-    templateName: "noop-security"
+    templateName: "no-op-security"
     workspace: "${WORKSPACE_ID}-sec"
     revision: "${TARGET_REVISION}"
     needs:
@@ -15,7 +15,7 @@ environments:
 
   data:
     name: "${WORKFLOW_ENV_PREFIX}-data"
-    templateName: "noop-data"
+    templateName: "no-op-data"
     workspace: "${WORKSPACE_ID}-data"
     revision: "${TARGET_REVISION}"
     needs:
@@ -23,7 +23,7 @@ environments:
 
   app:
     name: "${WORKFLOW_ENV_PREFIX}-app"
-    templateName: "noop-app"
+    templateName: "no-op-app"
     workspace: "${WORKSPACE_ID}-app"
     revision: "${TARGET_REVISION}"
     needs:
@@ -31,7 +31,7 @@ environments:
 
   monitoring:
     name: "${WORKFLOW_ENV_PREFIX}-monitoring"
-    templateName: "noop-monitoring"
+    templateName: "no-op-monitoring"
     workspace: "${WORKSPACE_ID}-mon"
     revision: "${TARGET_REVISION}"
     needs:
