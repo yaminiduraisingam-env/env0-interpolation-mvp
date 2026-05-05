@@ -3,8 +3,8 @@ terraform {
 }
 
 output "module_name" {
-  value       = "test1 test"
-  description = "Test test"
+  value       = "data"
+  description = "No-op execution"
 }
 
 output "status" {
