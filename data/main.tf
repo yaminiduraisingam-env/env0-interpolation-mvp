@@ -3,7 +3,7 @@ terraform {
 }
 
 output "module_name" {
-  value       = "test1"
+  value       = "test1 test"
   description = "test test test"
 }
 
