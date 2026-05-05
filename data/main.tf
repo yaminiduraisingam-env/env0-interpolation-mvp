@@ -4,7 +4,7 @@ terraform {
 
 output "module_name" {
   value       = "data"
-  description = "test123"
+  description = "This should be the only one"
 }
 
 output "status" {
