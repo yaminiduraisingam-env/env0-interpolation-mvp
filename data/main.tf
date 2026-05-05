@@ -4,7 +4,7 @@ terraform {
 
 output "module_name" {
   value       = "test1 test"
-  description = "Test"
+  description = "Test test"
 }
 
 output "status" {
