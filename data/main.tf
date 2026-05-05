@@ -4,7 +4,7 @@ terraform {
 
 output "module_name" {
   value       = "test1"
-  description = "Pending Approval"
+  description = "test test"
 }
 
 output "status" {
