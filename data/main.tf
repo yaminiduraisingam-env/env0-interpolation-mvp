@@ -3,7 +3,7 @@ terraform {
 }
 
 output "module_name" {
-  value       = "test"
+  value       = "test1"
   description = "Pending Approval"
 }
 
