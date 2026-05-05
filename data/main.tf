@@ -4,7 +4,7 @@ terraform {
 
 output "module_name" {
   value       = "data"
-  description = "This should be the only one"
+  description = "Change is made to push"
 }
 
 output "status" {
