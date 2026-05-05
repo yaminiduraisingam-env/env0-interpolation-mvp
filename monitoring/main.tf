@@ -3,7 +3,7 @@ terraform {
 }
 
 output "module_name" {
-  value       = "monitoring - test"
+  value       = "monitoring
   description = "Identifies which no-op module rans"
 }
 
