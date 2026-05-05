@@ -4,7 +4,7 @@ terraform {
 
 output "module_name" {
   value       = "data"
-  description = "No-op execution test"
+  description = "No-op execution test test"
 }
 
 output "status" {
