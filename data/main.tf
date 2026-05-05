@@ -3,8 +3,8 @@ terraform {
 }
 
 output "module_name" {
-  value       = "data"
-  description = "Change is made to push"
+  value       = "test"
+  description = "Pending Approval"
 }
 
 output "status" {
