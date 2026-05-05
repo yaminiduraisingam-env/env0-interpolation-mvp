@@ -4,7 +4,7 @@ terraform {
 
 output "module_name" {
   value       = "data"
-  description = "Identifies which no-op module ran"
+  description = "Identifies which no-op module ran-test"
 }
 
 output "status" {
