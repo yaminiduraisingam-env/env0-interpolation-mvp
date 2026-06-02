@@ -1,0 +1,9 @@
+version: 1
+deploy:
+  steps:
+    terraformOutput:
+      after:
+        - echo "----- env0 system vars -----"
+        - env | grep '^ENV0_' | sort
+        - echo "----- jq check -----"
+        - which jq || echo "jq NOT installed"
