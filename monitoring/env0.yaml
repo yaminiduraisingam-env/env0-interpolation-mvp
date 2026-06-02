@@ -4,16 +4,23 @@ deploy:
     terraformOutput:
       after:
         - |
-          MATCH=$(curl -s -u "$ENV0_API_KEY:$ENV0_API_SECRET" \
-            "https://api.env0.com/configuration?organizationId=$ENV0_ORGANIZATION_ID&environmentId=$ENV0_ENVIRONMENT_ID" \
-            | jq -c '.[] | select(.name=="MANUAL_VLPCR_ID" and .scope=="ENVIRONMENT")')
-          echo "Matched config object: [$MATCH]"
-          VAR_ID=$(echo "$MATCH" | jq -r '.id')
-          if [ -n "$VAR_ID" ] && [ "$VAR_ID" != "null" ]; then
-            echo "Deleting MANUAL_VLPCR_ID ($VAR_ID)"
-            curl -s -o /dev/null -w "delete status: %{http_code}\n" \
-              -X DELETE -u "$ENV0_API_KEY:$ENV0_API_SECRET" \
-              "https://api.env0.com/configuration/$VAR_ID"
+          RESP=$(curl -s -w "\n%{http_code}" -u "$ENV0_API_KEY:$ENV0_API_SECRET" \
+            "https://api.env0.com/configuration?organizationId=$ENV0_ORGANIZATION_ID&environmentId=$ENV0_ENVIRONMENT_ID")
+          CODE=$(printf '%s' "$RESP" | tail -n1)
+          BODY=$(printf '%s' "$RESP" | sed '$d')
+          TYPE=$(printf '%s' "$BODY" | jq -r 'type' 2>/dev/null)
+          echo "GET status: $CODE / body type: $TYPE"
+          if [ "$CODE" = "200" ] && [ "$TYPE" = "array" ]; then
+            VAR_ID=$(printf '%s' "$BODY" | jq -r '.[] | select(.name=="MANUAL_VLPCR_ID" and .scope=="ENVIRONMENT") | .id')
+            echo "Resolved env-scoped id: [$VAR_ID]"
+            if [ -n "$VAR_ID" ] && [ "$VAR_ID" != "null" ]; then
+              echo "Deleting MANUAL_VLPCR_ID ($VAR_ID)"
+              curl -s -o /dev/null -w "delete status: %{http_code}\n" \
+                -X DELETE -u "$ENV0_API_KEY:$ENV0_API_SECRET" \
+                "https://api.env0.com/configuration/$VAR_ID"
+            else
+              echo "No environment-scoped MANUAL_VLPCR_ID found, nothing to delete"
+            fi
           else
-            echo "MANUAL_VLPCR_ID (environment scope) not found, nothing to delete"
+            echo "GET did not return an array. Message: $(printf '%s' "$BODY" | jq -rc '.message // .error // .' 2>/dev/null)"
           fi
