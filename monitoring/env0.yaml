@@ -4,11 +4,16 @@ deploy:
     terraformOutput:
       after:
         - |
-          echo "=== Variant A: environmentId only ==="
-          curl -s -u "$ENV0_API_KEY:$ENV0_API_SECRET" \
-            "https://api.env0.com/configuration?environmentId=$ENV0_ENVIRONMENT_ID" \
-            | jq -rc 'if type=="array" then (.[] | {name, scope, id}) else . end'
-          echo "=== Variant B: org + environmentId ==="
-          curl -s -u "$ENV0_API_KEY:$ENV0_API_SECRET" \
+          MATCH=$(curl -s -u "$ENV0_API_KEY:$ENV0_API_SECRET" \
             "https://api.env0.com/configuration?organizationId=$ENV0_ORGANIZATION_ID&environmentId=$ENV0_ENVIRONMENT_ID" \
-            | jq -rc 'if type=="array" then (.[] | {name, scope, id}) else . end'
+            | jq -c '.[] | select(.name=="MANUAL_VLPCR_ID" and .scope=="ENVIRONMENT")')
+          echo "Matched config object: [$MATCH]"
+          VAR_ID=$(echo "$MATCH" | jq -r '.id')
+          if [ -n "$VAR_ID" ] && [ "$VAR_ID" != "null" ]; then
+            echo "Deleting MANUAL_VLPCR_ID ($VAR_ID)"
+            curl -s -o /dev/null -w "delete status: %{http_code}\n" \
+              -X DELETE -u "$ENV0_API_KEY:$ENV0_API_SECRET" \
+              "https://api.env0.com/configuration/$VAR_ID"
+          else
+            echo "MANUAL_VLPCR_ID (environment scope) not found, nothing to delete"
+          fi
