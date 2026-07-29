@@ -9,3 +9,9 @@ variable "workspace_id" {
   type        = string
   default     = "default"
 }
+
+variable "aws_region" {
+  description = "AWS region for the network step's resources"
+  type        = string
+  default     = "eu-central-1"
+}
